@@ -1,6 +1,9 @@
 package imparse
 
-import "context"
+import (
+	"context"
+	"github.com/txchat/imparse/proto"
+)
 
 type Channel int
 
@@ -31,5 +34,5 @@ type Pusher interface {
 }
 
 type Storage interface {
-	SaveMsg(context.Context, Frame) error
+	SaveMsg(context.Context, proto.Device, Frame) error
 }

@@ -1,6 +1,9 @@
 package imparse
 
-import "context"
+import (
+	"context"
+	"github.com/txchat/imparse/proto"
+)
 
 //
 type Exec interface {
@@ -81,6 +84,6 @@ func NewStandardStorage(db DB) *StandardStorage {
 	}
 }
 
-func (s *StandardStorage) SaveMsg(ctx context.Context, frame Frame) error {
-	return s.db.SaveMsg(frame)
+func (s *StandardStorage) SaveMsg(ctx context.Context, deviceType proto.Device, frame Frame) error {
+	return s.db.SaveMsg(deviceType, frame)
 }

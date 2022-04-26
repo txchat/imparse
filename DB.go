@@ -1,6 +1,9 @@
 package imparse
 
-import "context"
+import (
+	"context"
+	"github.com/txchat/imparse/proto"
+)
 
 type MsgIndex struct {
 	Mid        string
@@ -16,5 +19,5 @@ type Cache interface {
 }
 
 type DB interface {
-	SaveMsg(frame Frame) error
+	SaveMsg(deviceType proto.Device, frame Frame) error
 }

@@ -1,8 +1,8 @@
 // protoc -I=. -I=$GOPATH/src --go_out=plugins=grpc:. *.proto
 syntax = "proto3";
 
-package imparse.v1;
-option go_package = "github.com/txchat/imparse/proto";
+package imparse.proto;
+option go_package = "github.com/txchat/imparse/proto/common;common";
 
 enum Channel {
     ToUser = 0;

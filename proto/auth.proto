@@ -1,8 +1,8 @@
 // protoc -I=. -I=$GOPATH/src --go_out=plugins=grpc:. *.proto
 syntax = "proto3";
 
-package imparse.auth;
-option go_package = "github.com/txchat/imparse/proto";
+package imparse.proto;
+option go_package = "github.com/txchat/imparse/proto/auth;auth";
 
 enum Device {
   Android = 0;

@@ -2,7 +2,7 @@ package imparse
 
 import (
 	"context"
-	"github.com/txchat/imparse/proto"
+	"github.com/txchat/imparse/proto/auth"
 )
 
 //
@@ -84,6 +84,6 @@ func NewStandardStorage(db DB) *StandardStorage {
 	}
 }
 
-func (s *StandardStorage) SaveMsg(ctx context.Context, deviceType proto.Device, frame Frame) error {
+func (s *StandardStorage) SaveMsg(ctx context.Context, deviceType auth.Device, frame Frame) error {
 	return s.db.SaveMsg(deviceType, frame)
 }

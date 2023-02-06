@@ -8,19 +8,19 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	"github.com/txchat/imparse"
-	biz "github.com/txchat/imparse/proto"
+	"github.com/txchat/imparse/proto/common"
 	"github.com/txchat/imparse/util"
 )
 
 //private
 type PrivateFrame struct {
 	*StandardFrame
-	base *biz.Common
+	base *common.Common
 
 	stored bool
 }
 
-func NewPrivateFrame(standardFrame *StandardFrame, bizPro *biz.Common) *PrivateFrame {
+func NewPrivateFrame(standardFrame *StandardFrame, bizPro *common.Common) *PrivateFrame {
 	frame := &PrivateFrame{
 		StandardFrame: standardFrame,
 		base:          bizPro,
@@ -98,15 +98,15 @@ func (p *PrivateFrame) Ack(ctx context.Context, exec imparse.Exec) (int64, error
 }
 
 func (p *PrivateFrame) AckBody() ([]byte, error) {
-	body, err := proto.Marshal(&biz.CommonAck{
+	body, err := proto.Marshal(&common.CommonAck{
 		Mid:      p.base.GetMid(),
 		Datetime: p.base.GetDatetime(),
 	})
 	if err != nil {
 		return nil, fmt.Errorf("marshal CommonAck err: %v", err)
 	}
-	data, err := proto.Marshal(&biz.Proto{
-		EventType: biz.Proto_commonAck,
+	data, err := proto.Marshal(&common.Proto{
+		EventType: common.Proto_commonAck,
 		Body:      body,
 	})
 	if err != nil {
@@ -118,8 +118,8 @@ func (p *PrivateFrame) AckBody() ([]byte, error) {
 func (p *PrivateFrame) PushBody() ([]byte, error) {
 	var err error
 	var data []byte
-	pro := biz.Proto{
-		EventType: biz.Proto_common,
+	pro := common.Proto{
+		EventType: common.Proto_common,
 	}
 	pro.Body, err = proto.Marshal(p.base)
 	if err != nil {
@@ -133,14 +133,14 @@ func (p *PrivateFrame) PushBody() ([]byte, error) {
 }
 
 //
-func (p *PrivateFrame) GetChannelType() biz.Channel {
+func (p *PrivateFrame) GetChannelType() common.Channel {
 	return p.base.ChannelType
 }
 
-func (p *PrivateFrame) GetMsgType() biz.MsgType {
+func (p *PrivateFrame) GetMsgType() common.MsgType {
 	return p.base.MsgType
 }
 
-func (p *PrivateFrame) GetBase() *biz.Common {
+func (p *PrivateFrame) GetBase() *common.Common {
 	return p.base
 }

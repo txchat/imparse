@@ -1,35 +1,35 @@
 package chat
 
 import (
+	"github.com/txchat/im/api/protocol"
 	"io"
 	"io/ioutil"
-
 	"github.com/golang/protobuf/proto"
-	comet "github.com/txchat/im/api/comet/grpc"
 	"github.com/txchat/imparse"
-	biz "github.com/txchat/imparse/proto"
+	"github.com/txchat/imparse/proto/common"
+	"github.com/txchat/imparse/proto/signal"
 )
 
 type _handleEvent func(*StandardFrame, []byte) (imparse.Frame, error)
 
-var events = map[biz.Proto_EventType]_handleEvent{
-	biz.Proto_common: func(s *StandardFrame, body []byte) (imparse.Frame, error) {
-		var pro biz.Common
+var events = map[common.Proto_EventType]_handleEvent{
+	common.Proto_common: func(s *StandardFrame, body []byte) (imparse.Frame, error) {
+		var pro common.Common
 		err := proto.Unmarshal(body, &pro)
 		if err != nil {
 			return nil, err
 		}
 		switch pro.ChannelType {
-		case biz.Channel_ToUser:
+		case common.Channel_ToUser:
 			return NewPrivateFrame(s, &pro), nil
-		case biz.Channel_ToGroup:
+		case common.Channel_ToGroup:
 			return NewGroupFrame(s, &pro), nil
 		default:
 			return nil, imparse.ErrExecSupport
 		}
 	},
-	biz.Proto_Signal: func(s *StandardFrame, body []byte) (imparse.Frame, error) {
-		var pro biz.Signal
+	common.Proto_Signal: func(s *StandardFrame, body []byte) (imparse.Frame, error) {
+		var pro signal.Signal
 		err := proto.Unmarshal(body, &pro)
 		if err != nil {
 			return nil, err
@@ -49,7 +49,7 @@ func (s *StandardParse) NewFrame(key, from string, in io.Reader, opts ...Option)
 	}
 
 	//
-	var p comet.Proto
+	var p protocol.Proto
 	err = proto.Unmarshal(data, &p)
 	if err != nil {
 		return nil, err
@@ -61,12 +61,12 @@ func (s *StandardParse) NewFrame(key, from string, in io.Reader, opts ...Option)
 	}
 
 	switch p.GetOp() {
-	case int32(comet.Op_SendMsg):
-	case int32(comet.Op_Auth):
+	case int32(protocol.Op_SendMsg):
+	case int32(protocol.Op_Auth):
 
 	}
 	//业务服务协议解析
-	var pro biz.Proto
+	var pro common.Proto
 	err = proto.Unmarshal(p.Body, &pro)
 	if err != nil {
 		return nil, err

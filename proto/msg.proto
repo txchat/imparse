@@ -1,10 +1,12 @@
 // protoc -I=. -I=$GOPATH/src --go_out=plugins=grpc:. *.proto
 syntax = "proto3";
 
-package imparse.msg;
-option go_package = "github.com/txchat/imparse/proto";
+package imparse.proto;
 
-import "signal.proto";
+import "github.com/txchat/imparse/proto/signal.proto";
+
+option go_package = "github.com/txchat/imparse/proto/msg;msg";
+
 
 message EncryptMsg {
   string content = 1;
@@ -151,7 +153,7 @@ message NoticeMsgDeleteGroup {
 message NoticeMsgUpdateGroupMuted {
   int64          group    = 1;
   string         operator = 2;
-  imparse.signal.MuteType       type     = 3;
+  MuteType       type     = 3;
 }
 
 message NoticeMsgUpdateGroupMemberMutedTime {

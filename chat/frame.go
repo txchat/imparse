@@ -2,7 +2,7 @@ package chat
 
 import (
 	"github.com/golang/protobuf/proto"
-	comet "github.com/txchat/im/api/comet/grpc"
+	"github.com/txchat/im/api/protocol"
 	"github.com/txchat/imparse"
 )
 
@@ -47,7 +47,7 @@ func WithTransmissionMethod(t imparse.Channel) Option {
 //标准帧 定义了标准协议的Ack数据和Push数据格式
 type StandardFrame struct {
 	body imparse.BizProto
-	base *comet.Proto
+	base *protocol.Proto
 
 	mid                int64
 	createTime         uint64
@@ -57,7 +57,7 @@ type StandardFrame struct {
 	transmissionMethod imparse.Channel
 }
 
-func NewStandardFrame(base *comet.Proto, key, from string, opts ...Option) *StandardFrame {
+func NewStandardFrame(base *protocol.Proto, key, from string, opts ...Option) *StandardFrame {
 	options := Options{}
 	for _, o := range opts {
 		o(&options)
@@ -66,7 +66,7 @@ func NewStandardFrame(base *comet.Proto, key, from string, opts ...Option) *Stan
 }
 
 func (f *StandardFrame) Data() ([]byte, error) {
-	p := comet.Proto{
+	p := protocol.Proto{
 		Ver: f.base.GetVer(),
 		Op:  f.base.GetOp(),
 		Seq: f.base.GetSeq(),
@@ -82,9 +82,9 @@ func (f *StandardFrame) Data() ([]byte, error) {
 }
 
 func (f *StandardFrame) AckData() ([]byte, error) {
-	p := comet.Proto{
+	p := protocol.Proto{
 		Ver: f.base.GetVer(),
-		Op:  int32(comet.Op_SendMsgReply),
+		Op:  int32(protocol.Op_SendMsgReply),
 		Seq: f.base.GetSeq(),
 		Ack: f.base.GetAck(),
 	}
@@ -98,9 +98,9 @@ func (f *StandardFrame) AckData() ([]byte, error) {
 }
 
 func (f *StandardFrame) PushData() ([]byte, error) {
-	p := comet.Proto{
+	p := protocol.Proto{
 		Ver: f.base.GetVer(),
-		Op:  int32(comet.Op_ReceiveMsg),
+		Op:  int32(protocol.Op_ReceiveMsg),
 		Seq: f.base.GetSeq(),
 		Ack: f.base.GetAck(),
 	}

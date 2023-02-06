@@ -2,7 +2,7 @@ package imparse
 
 import (
 	"context"
-	"github.com/txchat/imparse/proto"
+	"github.com/txchat/imparse/proto/auth"
 )
 
 type Channel int
@@ -34,5 +34,5 @@ type Pusher interface {
 }
 
 type Storage interface {
-	SaveMsg(context.Context, proto.Device, Frame) error
+	SaveMsg(context.Context, auth.Device, Frame) error
 }

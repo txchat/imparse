@@ -3,16 +3,15 @@ package test
 import (
 	"bytes"
 	"context"
+	"github.com/golang/protobuf/proto"
+	"github.com/txchat/im/api/protocol"
+	"github.com/txchat/imparse"
+	"github.com/txchat/imparse/chat"
+	"github.com/txchat/imparse/proto/common"
 	"math/rand"
 	"os"
 	"testing"
 	"time"
-
-	"github.com/golang/protobuf/proto"
-	comet "github.com/txchat/im/api/comet/grpc"
-	"github.com/txchat/imparse"
-	"github.com/txchat/imparse/chat"
-	biz "github.com/txchat/imparse/proto"
 )
 
 type msg []byte
@@ -25,26 +24,26 @@ func TestMain(t *testing.M) {
 }
 
 func genTestFrames() []msg {
-	p := comet.Proto{
+	p := protocol.Proto{
 		Ver:  0,
-		Op:   int32(comet.Op_SendMsg),
+		Op:   int32(protocol.Op_SendMsg),
 		Seq:  1,
 		Ack:  0,
 		Body: nil,
 	}
 
-	pro := biz.Proto{
-		EventType: biz.Proto_common,
+	pro := common.Proto{
+		EventType: common.Proto_common,
 		Body:      nil,
 	}
 
-	comm := biz.Common{
-		ChannelType: biz.Channel_ToUser,
+	comm := common.Common{
+		ChannelType: common.Channel_ToUser,
 		Mid:         0,
 		Seq:         "client-msg",
 		From:        "client-from",
 		Target:      "client-target",
-		MsgType:     biz.MsgType_Text,
+		MsgType:     common.MsgType_Text,
 		Msg:         nil,
 	}
 

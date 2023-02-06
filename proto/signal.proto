@@ -1,10 +1,12 @@
 // protoc -I=. -I=$GOPATH/src --go_out=plugins=grpc:. *.proto
 syntax = "proto3";
 
-package imparse.signal;
-option go_package = "github.com/txchat/imparse/proto";
+package imparse.proto;
 
-import "auth.proto";
+import "github.com/txchat/imparse/proto/auth.proto";  //我自己定义，在同一个package下
+
+option go_package = "github.com/txchat/imparse/proto/signal;signal";
+
 
 //alert msg define
 message Signal {
@@ -66,7 +68,7 @@ message SignalFocusMessage {
 
 message SignalEndpointLogin {
   string  uuid  = 1;
-  auth.Device  device = 2;
+  Device  device = 2;
   string  deviceName = 3;
   uint64  datetime = 4;
 }

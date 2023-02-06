@@ -7,20 +7,21 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	"github.com/txchat/imparse"
-	biz "github.com/txchat/imparse/proto"
+	"github.com/txchat/imparse/proto/common"
+	"github.com/txchat/imparse/proto/signal"
 	"github.com/txchat/imparse/util"
 )
 
 //private
 type SignalFrame struct {
 	*StandardFrame
-	base *biz.Signal
+	base *signal.Signal
 
 	mid        int64
 	createTime uint64
 }
 
-func NewNoticeFrame(standardFrame *StandardFrame, bizPro *biz.Signal) *SignalFrame {
+func NewNoticeFrame(standardFrame *StandardFrame, bizPro *signal.Signal) *SignalFrame {
 	frame := &SignalFrame{
 		StandardFrame: standardFrame,
 		base:          bizPro,
@@ -70,8 +71,8 @@ func (p *SignalFrame) AckBody() ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("marshal NotifyMsgAck err: %v", err)
 	}
-	data, err := proto.Marshal(&biz.Proto{
-		EventType: biz.Proto_Signal,
+	data, err := proto.Marshal(&common.Proto{
+		EventType: common.Proto_Signal,
 		Body:      body,
 	})
 	if err != nil {
@@ -83,8 +84,8 @@ func (p *SignalFrame) AckBody() ([]byte, error) {
 func (p *SignalFrame) PushBody() ([]byte, error) {
 	var err error
 	var data []byte
-	pro := biz.Proto{
-		EventType: biz.Proto_Signal,
+	pro := common.Proto{
+		EventType: common.Proto_Signal,
 	}
 	pro.Body, err = proto.Marshal(p.base)
 	if err != nil {
@@ -97,6 +98,6 @@ func (p *SignalFrame) PushBody() ([]byte, error) {
 	return data, err
 }
 
-func (p *SignalFrame) GetBase() *biz.Signal {
+func (p *SignalFrame) GetBase() *signal.Signal {
 	return p.base
 }

@@ -2,7 +2,7 @@ package imparse
 
 import (
 	"context"
-	"github.com/txchat/imparse/proto"
+	"github.com/txchat/imparse/proto/auth"
 )
 
 type MsgIndex struct {
@@ -19,5 +19,5 @@ type Cache interface {
 }
 
 type DB interface {
-	SaveMsg(deviceType proto.Device, frame Frame) error
+	SaveMsg(deviceType auth.Device, frame Frame) error
 }
